@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+      - "8082:8082"
+    environment:
+      # URL de conexão com o novo nome do banco de dados
+      - DATABASE_URL=mysql://root:root@db:3307/orders
+    depends_on:
+      - db
+    # Vinculando o serviço `app` à rede `app-network`
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=orders
+      - MYSQL_PASSWORD=root
+    volumes:
+      - mysql-data:/var/lib/mysql
+    # Vinculando o serviço `db` à rede `app-network`
+    networks:
+      - app-network
+    restart: always
+
+# Definição da rede para comunicação entre os serviços
+networks:
+  app-network:
+    driver: bridge
+
+# Definição do volume para persistir os dados do MySQL
+volumes:
+  mysql-data:

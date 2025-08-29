@@ -1,0 +1,41 @@
+### Criar uma nova ordem (REST)
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "Customer_name": "Mauricio",
+  "Product_name":  "Headphones",
+  "Quantity": 1
+}
+
+### Listar todas as ordens (REST)
+GET http://localhost:8080/orders
+
+
+### Criar uma nova ordem (GraphQL)
+POST http://localhost:8082/query
+Content-Type: application/json
+
+{
+  "query": "mutation CreateOrder($input: NewOrder!) { createOrder(input: $input) { id, customer_name, product_name, quantity, createdAt } }",
+  "variables": {
+    "input": {
+      "customer_name": "Mauricio Gaubeur",
+      "product_name": "curso fullcycle",
+      "quantity": 1
+    }
+  }
+}
+
+### Listar todas as ordens (GraphQL)
+POST  http://localhost:8082/query
+Content-Type: application/json
+
+{
+  "query": "query queryOrder{ orders{ id, customer_name, product_name, quantity, createdAt } }"
+}
+
+### Executar uma chamada gRPC (utilizando um cliente gRPC como `grpcurl` ou similar)
+# Exemplo de comando `grpcurl` para listar ordens:
+# grpcurl -plaintext localhost:50051 OrderService/ListOrders
+

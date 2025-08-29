@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package pb;
+
+// Importa o tipo Timestamp padrão do Protocol Buffers.
+import "google/protobuf/timestamp.proto";
+
+// Order representa a estrutura de um pedido
+message Order {
+  int64 id = 1;
+  string customer_name = 2;
+  string product_name = 3;
+  int64 quantity = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+// Request vazia para listar todos os pedidos
+message ListOrdersRequest {}
+
+// Resposta contendo uma lista de pedidos
+message ListOrdersResponse {
+  repeated Order orders = 1;
+}
+
+// O serviço gRPC para gerenciar pedidos
+service OrderService {
+  rpc ListOrders (ListOrdersRequest) returns (ListOrdersResponse);
+}
