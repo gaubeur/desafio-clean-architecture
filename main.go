@@ -153,8 +153,7 @@ func listOrdersHandler(db *sql.DB) http.HandlerFunc {
 
 func main() {
 	// Obtém a URL do banco de dados a partir da variável de ambiente.
-	//dbURL := os.Getenv("DB_URL")
-	dbURL := "root:root@tcp(127.0.0.1:3307)/orders"
+	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
 		log.Fatal("A variável de ambiente DB_URL não foi definida")
 	}
@@ -222,6 +221,9 @@ func main() {
 
 	// ---------------- INICIALIZAÇÃO DO SERVIDOR REST ----------------
 	router := mux.NewRouter()
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Serviço de Pedidos - REST"))
+	})
 	router.HandleFunc("/orders", createOrderHandler(db)).Methods("POST")
 	router.HandleFunc("/orders", listOrdersHandler(db)).Methods("GET")
 	log.Println("Servidor REST iniciado na porta 8080...")

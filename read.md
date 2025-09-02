@@ -41,6 +41,10 @@ docker ps -aq
 docker rm -f
 docker system prune --volumes -f
 
+-- para entrar no docker
+docker-compose exec app bash
+.. app name of service
+
 
 -- para abrir o banco de dados
 docker-compose exec mysql bash

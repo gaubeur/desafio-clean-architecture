@@ -1,6 +1,33 @@
-version: '3.8'
-
 services:
+  db:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=orders
+      - MYSQL_PASSWORD=root      
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_PASSWORD
+      interval: 10s
+      timeout: 3s
+      retries: 5      
+    # Vinculando o serviço `db` à rede `app-network`
+    networks:
+      - app-network
+    restart: always
+
+  migrate:
+    image: migrate/migrate
+    networks:
+      - app-network
+    volumes:
+      - ./sql/migrations:/migrations
+    command: "-path=/migrations -database 'mysql://root:root@tcp(db:3306)/orders' up"
+    depends_on:
+      db:
+        condition: service_healthy    
+
   app:
     build: .
     ports:
@@ -9,33 +36,15 @@ services:
       - "8082:8082"
     environment:
       # URL de conexão com o novo nome do banco de dados
-      - DATABASE_URL=mysql://root:root@db:3307/orders
+      - DATABASE_URL="mysql://root:root@tcp(db:3306)/orders"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     # Vinculando o serviço `app` à rede `app-network`
     networks:
       - app-network
 
-  db:
-    image: mysql:5.7
-    ports:
-      - "3307:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=orders
-      - MYSQL_PASSWORD=root
-    volumes:
-      - mysql-data:/var/lib/mysql
-    # Vinculando o serviço `db` à rede `app-network`
-    networks:
-      - app-network
-    restart: always
-
 # Definição da rede para comunicação entre os serviços
 networks:
   app-network:
-    driver: bridge
-
-# Definição do volume para persistir os dados do MySQL
-volumes:
-  mysql-data:
+    driver: bridge   

@@ -1,5 +1,5 @@
 # Use a imagem oficial do Go como base
-FROM golang:1.25
+FROM golang:latest
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
@@ -17,7 +17,7 @@ EXPOSE 8082
 EXPOSE 50051
 
 # Compila o programa Go e gera um binário executável
-RUN go build -o main .
+RUN go build -o server .
 
 # Comando para executar a aplicação
-CMD ["./main"]
+CMD ["./server"]
