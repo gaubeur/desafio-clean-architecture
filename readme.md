@@ -69,3 +69,7 @@ password : root
 
 
 No aqruivo api.http temos exemplo de uso do rest / grpc / graphQL
+
+
+*** PARA SUBIR O AMBIENTE
+docker-compose up
