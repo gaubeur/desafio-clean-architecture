@@ -14,6 +14,14 @@ Servidor REST iniciado na porta 8080
 Servidor gRPC iniciado na porta 50051
 http://localhost:8082/ for GraphQL playground na porta 8082
 
+
+*** PARA SUBIR O AMBIENTE
+docker-compose up
+
+*** No aqruivo api.http temos exemplo de uso do rest / grpc / graphQL
+
+*** Informações Extras
+
 Relação de comandos utilizados para o desafio
 
 -- comando para migrate
@@ -68,8 +76,5 @@ password : root
   go run github.com/99designs/gqlgen generate
 
 
-No aqruivo api.http temos exemplo de uso do rest / grpc / graphQL
 
 
-*** PARA SUBIR O AMBIENTE
-docker-compose up
